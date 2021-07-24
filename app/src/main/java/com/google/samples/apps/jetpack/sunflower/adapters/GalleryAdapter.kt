@@ -27,6 +27,7 @@ import com.google.samples.apps.jetpack.sunflower.GalleryFragment
 import com.google.samples.apps.jetpack.sunflower.adapters.GalleryAdapter.GalleryViewHolder
 import com.google.samples.apps.jetpack.sunflower.data.UnsplashPhoto
 import com.google.samples.apps.jetpack.sunflower.databinding.ListItemPhotoBinding
+import com.google.samples.apps.jetpack.sunflower.ui.layout.photo.ItemPhoto
 
 /**
  * Adapter for the [RecyclerView] in [GalleryFragment].
@@ -35,13 +36,16 @@ import com.google.samples.apps.jetpack.sunflower.databinding.ListItemPhotoBindin
 class GalleryAdapter : PagingDataAdapter<UnsplashPhoto, GalleryViewHolder>(GalleryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
-        return GalleryViewHolder(
-            ListItemPhotoBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
+        val viewBinding = ListItemPhotoBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
         )
+        val holder = GalleryViewHolder(viewBinding)
+        getItem(holder.bindingAdapterPosition)?.let {
+            viewBinding.composeView.setContent { ItemPhoto(it) }
+        }
+        return holder
     }
 
     override fun onBindViewHolder(holder: GalleryViewHolder, position: Int) {
