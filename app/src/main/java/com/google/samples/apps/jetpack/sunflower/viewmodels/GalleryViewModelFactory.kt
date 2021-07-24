@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Google LLC
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,24 +17,20 @@
 package com.google.samples.apps.jetpack.sunflower.viewmodels
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import com.google.samples.apps.jetpack.sunflower.data.UnsplashPhoto
+import androidx.lifecycle.ViewModelProvider
+import com.google.samples.apps.jetpack.sunflower.data.GardenPlantingRepository
 import com.google.samples.apps.jetpack.sunflower.data.UnsplashRepository
-import kotlinx.coroutines.flow.Flow
 
-class GalleryViewModel constructor(
+/**
+ * Factory for creating a [GardenPlantingListViewModel] with a constructor that takes a
+ * [GardenPlantingRepository].
+ */
+class GalleryViewModelFactory(
     private val repository: UnsplashRepository
-) : ViewModel() {
-    private var currentQueryValue: String? = null
-    private var currentSearchResult: Flow<PagingData<UnsplashPhoto>>? = null
+) : ViewModelProvider.Factory {
 
-    fun searchPictures(queryString: String): Flow<PagingData<UnsplashPhoto>> {
-        currentQueryValue = queryString
-        val newResult: Flow<PagingData<UnsplashPhoto>> =
-            repository.getSearchResultStream(queryString).cachedIn(viewModelScope)
-        currentSearchResult = newResult
-        return newResult
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return GalleryViewModel(repository) as T
     }
 }

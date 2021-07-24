@@ -27,15 +27,16 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.samples.apps.jetpack.sunflower.adapters.GardenPlantingAdapter
 import com.google.samples.apps.jetpack.sunflower.adapters.PLANT_LIST_PAGE_INDEX
 import com.google.samples.apps.jetpack.sunflower.databinding.FragmentGardenBinding
+import com.google.samples.apps.jetpack.sunflower.utilities.Injector
 import com.google.samples.apps.jetpack.sunflower.viewmodels.GardenPlantingListViewModel
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class GardenFragment : Fragment() {
 
     private lateinit var binding: FragmentGardenBinding
 
-    private val viewModel: GardenPlantingListViewModel by viewModels()
+    private val viewModel: GardenPlantingListViewModel by viewModels {
+        Injector.provideGardenPlantingListViewModelFactory(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

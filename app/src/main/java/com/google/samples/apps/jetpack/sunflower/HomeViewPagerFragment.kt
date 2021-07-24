@@ -27,9 +27,7 @@ import com.google.samples.apps.jetpack.sunflower.adapters.MY_GARDEN_PAGE_INDEX
 import com.google.samples.apps.jetpack.sunflower.adapters.PLANT_LIST_PAGE_INDEX
 import com.google.samples.apps.jetpack.sunflower.adapters.SunflowerPagerAdapter
 import com.google.samples.apps.jetpack.sunflower.databinding.FragmentViewPagerBinding
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class HomeViewPagerFragment : Fragment() {
 
     override fun onCreateView(

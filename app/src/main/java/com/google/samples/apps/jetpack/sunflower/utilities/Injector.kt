@@ -18,6 +18,7 @@ package com.google.samples.apps.jetpack.sunflower.utilities
 
 import android.content.Context
 import androidx.fragment.app.Fragment
+import com.google.samples.apps.jetpack.sunflower.api.UnsplashService
 import com.google.samples.apps.jetpack.sunflower.data.AppDatabase
 import com.google.samples.apps.jetpack.sunflower.data.GardenPlantingRepository
 import com.google.samples.apps.jetpack.sunflower.data.PlantRepository
@@ -29,6 +30,7 @@ import com.google.samples.apps.sunflower.viewmodels.PlantListViewModelFactory
  * Static methods used to inject classes needed for various Activities and Fragments.
  */
 object Injector {
+    val unsplashService: UnsplashService by lazy { UnsplashService.create() }
 
     private fun getPlantRepository(context: Context): PlantRepository {
         return PlantRepository.getInstance(
