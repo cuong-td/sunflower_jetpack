@@ -23,6 +23,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,7 +46,10 @@ import com.google.samples.apps.jetpack.sunflower.data.Plant
 import com.google.samples.apps.jetpack.sunflower.viewmodels.PlantDetailViewModel
 
 @Composable
-fun PlantDetailDescription(plantDetailViewModel: PlantDetailViewModel, modifier: Modifier = Modifier) {
+fun PlantDetailDescription(
+    plantDetailViewModel: PlantDetailViewModel,
+    modifier: Modifier = Modifier
+) {
     // Observes values coming from the VM's LiveData<Plant> field as State<Plant?>
     val plant by plantDetailViewModel.plant.observeAsState()
 
@@ -58,6 +62,7 @@ fun PlantDetailDescription(plantDetailViewModel: PlantDetailViewModel, modifier:
 
 @Composable
 fun PlantDetailContent(plant: Plant, navIsGone: Boolean, modifier: Modifier = Modifier) {
+//    Surface {
     ConstraintLayout(modifier.padding(dimensionResource(R.dimen.margin_normal))) {
         val (name, water, desc, nav) = createRefs()
         Text(
@@ -94,6 +99,7 @@ fun PlantDetailContent(plant: Plant, navIsGone: Boolean, modifier: Modifier = Mo
             )
         }
     }
+//    }
 }
 
 @Composable

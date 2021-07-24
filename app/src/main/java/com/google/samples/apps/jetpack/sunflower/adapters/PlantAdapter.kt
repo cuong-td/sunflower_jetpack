@@ -27,6 +27,7 @@ import com.google.samples.apps.jetpack.sunflower.HomeViewPagerFragmentDirections
 import com.google.samples.apps.jetpack.sunflower.PlantListFragment
 import com.google.samples.apps.jetpack.sunflower.data.Plant
 import com.google.samples.apps.jetpack.sunflower.databinding.ListItemPlantBinding
+import com.google.samples.apps.jetpack.sunflower.layout.plantlist.ItemPlant
 
 /**
  * Adapter for the [RecyclerView] in [PlantListFragment].
@@ -34,13 +35,16 @@ import com.google.samples.apps.jetpack.sunflower.databinding.ListItemPlantBindin
 class PlantAdapter : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return PlantViewHolder(
-            ListItemPlantBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
+        val viewBinding = ListItemPlantBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
         )
+        val holder = PlantViewHolder(viewBinding)
+        viewBinding.composeView.setContent {
+            ItemPlant(getItem(holder.bindingAdapterPosition))
+        }
+        return holder
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
