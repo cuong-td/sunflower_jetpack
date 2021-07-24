@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.jetpack.sunflower.BuildConfig
-import com.google.samples.apps.jetpack.sunflower.layout.plantdetail.PlantDetailFragment
+import com.google.samples.apps.jetpack.sunflower.ui.layout.plantdetail.PlantDetailFragment
 import com.google.samples.apps.jetpack.sunflower.data.GardenPlantingRepository
 import com.google.samples.apps.jetpack.sunflower.data.PlantRepository
 import kotlinx.coroutines.launch

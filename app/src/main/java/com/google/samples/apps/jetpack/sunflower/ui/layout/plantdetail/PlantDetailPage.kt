@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.jetpack.sunflower.layout.plantdetail
+package com.google.samples.apps.jetpack.sunflower.ui.layout.plantdetail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box

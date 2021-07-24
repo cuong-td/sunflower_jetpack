@@ -27,7 +27,7 @@ import com.google.samples.apps.jetpack.sunflower.HomeViewPagerFragmentDirections
 import com.google.samples.apps.jetpack.sunflower.PlantListFragment
 import com.google.samples.apps.jetpack.sunflower.data.Plant
 import com.google.samples.apps.jetpack.sunflower.databinding.ListItemPlantBinding
-import com.google.samples.apps.jetpack.sunflower.layout.plantlist.ItemPlant
+import com.google.samples.apps.jetpack.sunflower.ui.layout.plantlist.ItemPlant
 
 /**
  * Adapter for the [RecyclerView] in [PlantListFragment].
