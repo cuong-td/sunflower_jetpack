@@ -25,7 +25,7 @@
             type="com.google.samples.apps.jetpack.sunflower.viewmodels.PlantDetailViewModel" />
         <variable
             name="callback"
-            type="com.google.samples.apps.jetpack.sunflower.layout.plantdetail.PlantDetailFragment.Callback" />
+            type="com.google.samples.apps.jetpack.sunflower.ui.layout.plantdetail.PlantDetailFragment.Callback" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

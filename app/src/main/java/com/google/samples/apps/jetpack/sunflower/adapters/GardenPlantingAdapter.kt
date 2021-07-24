@@ -19,15 +19,14 @@ package com.google.samples.apps.jetpack.sunflower.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.samples.apps.jetpack.sunflower.HomeViewPagerFragmentDirections
-import com.google.samples.apps.jetpack.sunflower.R
 import com.google.samples.apps.jetpack.sunflower.data.PlantAndGardenPlantings
 import com.google.samples.apps.jetpack.sunflower.databinding.ListItemGardenPlantingBinding
+import com.google.samples.apps.jetpack.sunflower.ui.layout.garden.ItemGarden
 import com.google.samples.apps.jetpack.sunflower.viewmodels.PlantAndGardenPlantingsViewModel
 
 class GardenPlantingAdapter :
@@ -37,12 +36,17 @@ class GardenPlantingAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            DataBindingUtil.inflate(
+            ListItemGardenPlantingBinding.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.list_item_garden_planting,
                 parent,
                 false
-            )
+            ).apply {
+                composeView.setContent {
+                    viewModel?.let {
+                        ItemGarden(it)
+                    }
+                }
+            }
         )
     }
 
