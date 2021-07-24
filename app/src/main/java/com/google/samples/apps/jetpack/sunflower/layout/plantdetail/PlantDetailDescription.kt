@@ -19,12 +19,10 @@ package com.google.samples.apps.jetpack.sunflower.layout.plantdetail
 import android.content.res.Configuration
 import android.text.method.LinkMovementMethod
 import android.widget.TextView
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,10 +32,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.text.HtmlCompat
 import com.google.android.material.composethemeadapter.MdcTheme
 import com.google.samples.apps.jetpack.sunflower.R
@@ -45,24 +45,53 @@ import com.google.samples.apps.jetpack.sunflower.data.Plant
 import com.google.samples.apps.jetpack.sunflower.viewmodels.PlantDetailViewModel
 
 @Composable
-fun PlantDetailDescription(plantDetailViewModel: PlantDetailViewModel) {
+fun PlantDetailDescription(plantDetailViewModel: PlantDetailViewModel, modifier: Modifier = Modifier) {
     // Observes values coming from the VM's LiveData<Plant> field as State<Plant?>
     val plant by plantDetailViewModel.plant.observeAsState()
 
     // New emissions from plant will make PlantDetailDescription recompose as the state's read here
     plant?.let {
         // If plant is not null, display the content
-        PlantDetailContent(it)
+        PlantDetailContent(it, !plantDetailViewModel.hasValidUnsplashKey(), modifier)
     }
 }
 
 @Composable
-fun PlantDetailContent(plant: Plant) {
-    Surface {
-        Column(Modifier.padding(dimensionResource(R.dimen.margin_normal))) {
-            PlantName(plant.name)
-            PlantWatering(plant.wateringInterval)
-            PlantDescription(plant.description)
+fun PlantDetailContent(plant: Plant, navIsGone: Boolean, modifier: Modifier = Modifier) {
+    ConstraintLayout(modifier.padding(dimensionResource(R.dimen.margin_normal))) {
+        val (name, water, desc, nav) = createRefs()
+        Text(
+            text = plant.name,
+            style = MaterialTheme.typography.h5,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = dimensionResource(R.dimen.margin_small))
+                .wrapContentWidth(align = Alignment.CenterHorizontally)
+                .constrainAs(name) {}
+        )
+        PlantWatering(plant.wateringInterval, Modifier
+            .fillMaxWidth()
+            .constrainAs(water) {
+                top.linkTo(name.bottom)
+            })
+        PlantDescription(plant.description, Modifier.constrainAs(desc) {
+            top.linkTo(water.bottom)
+        })
+        if (!navIsGone) {
+            Image(
+                painter = painterResource(R.drawable.ic_photo_library),
+                contentDescription = stringResource(R.string.gallery_content_description),
+                modifier = Modifier
+                    .absolutePadding(
+                        top = dimensionResource(R.dimen.margin_normal),
+                        right = dimensionResource(R.dimen.margin_small)
+                    )
+                    .clickable { }
+                    .constrainAs(nav) {
+                        top.linkTo(name.bottom)
+                        end.linkTo(parent.end)
+                    }
+            )
         }
     }
 }
@@ -80,8 +109,8 @@ private fun PlantName(name: String) {
 }
 
 @Composable
-private fun PlantWatering(wateringInterval: Int) {
-    Column(Modifier.fillMaxWidth()) {
+private fun PlantWatering(wateringInterval: Int, modifier: Modifier) {
+    Column(modifier) {
         // Same modifier used by both Texts
         val centerWithPaddingModifier = Modifier
             .padding(horizontal = dimensionResource(R.dimen.margin_small))
@@ -107,7 +136,7 @@ private fun PlantWatering(wateringInterval: Int) {
 }
 
 @Composable
-private fun PlantDescription(description: String) {
+private fun PlantDescription(description: String, modifier: Modifier) {
     // Remembers the HTML formatted description. Re-executes on a new description
     val htmlDescription = remember(description) {
         HtmlCompat.fromHtml(description, HtmlCompat.FROM_HTML_MODE_COMPACT)
@@ -123,7 +152,8 @@ private fun PlantDescription(description: String) {
         },
         update = {
             it.text = htmlDescription
-        }
+        },
+        modifier = modifier
     )
 }
 
@@ -132,7 +162,7 @@ private fun PlantDescription(description: String) {
 private fun PlantDetailContentPreview() {
     val plant = Plant("id", "Apple", "HTML<br><br>description", 3, 30, "")
     MdcTheme {
-        PlantDetailContent(plant)
+        PlantDetailContent(plant, false)
     }
 }
 
@@ -141,7 +171,7 @@ private fun PlantDetailContentPreview() {
 private fun PlantDetailContentDarkPreview() {
     val plant = Plant("id", "Apple", "HTML<br><br>description", 3, 30, "")
     MdcTheme {
-        PlantDetailContent(plant)
+        PlantDetailContent(plant, false)
     }
 }
 
@@ -157,7 +187,7 @@ private fun PlantNamePreview() {
 @Composable
 private fun PlantWateringPreview() {
     MdcTheme {
-        PlantWatering(7)
+        PlantWatering(7, Modifier.padding())
     }
 }
 
@@ -165,6 +195,6 @@ private fun PlantWateringPreview() {
 @Composable
 private fun PlantDescriptionPreview() {
     MdcTheme {
-        PlantDescription("HTML<br><br>description")
+        PlantDescription("HTML<br><br>description", Modifier.padding())
     }
 }

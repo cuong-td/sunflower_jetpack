@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ShareCompat
 import androidx.core.widget.NestedScrollView
@@ -34,9 +35,9 @@ import com.google.android.material.composethemeadapter.MdcTheme
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.samples.apps.jetpack.sunflower.R
-import com.google.samples.apps.jetpack.sunflower.layout.plantdetail.PlantDetailFragment.Callback
 import com.google.samples.apps.jetpack.sunflower.data.Plant
 import com.google.samples.apps.jetpack.sunflower.databinding.FragmentPlantDetailBinding
+import com.google.samples.apps.jetpack.sunflower.layout.plantdetail.PlantDetailFragment.Callback
 import com.google.samples.apps.jetpack.sunflower.utilities.Injector
 import com.google.samples.apps.jetpack.sunflower.viewmodels.PlantDetailViewModel
 
@@ -120,7 +121,11 @@ class PlantDetailFragment : Fragment() {
             }
         }
         setHasOptionsMenu(true)
-
+//        return ComposeView(requireContext()).apply {
+//            setContent {
+//                PlantDetailPage(plantDetailViewModel, callback = { })
+//            }
+//        }
         return binding.root
     }
 
