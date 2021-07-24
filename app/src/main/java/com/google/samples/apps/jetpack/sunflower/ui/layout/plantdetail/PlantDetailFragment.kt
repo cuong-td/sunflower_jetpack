@@ -115,7 +115,9 @@ class PlantDetailFragment : Fragment() {
 
             composeView.setContent {
                 MdcTheme {
-                    PlantDetailDescription(plantDetailViewModel)
+                    PlantDetailDescription(plantDetailViewModel, {
+                        navigateToGallery()
+                    })
                 }
             }
         }

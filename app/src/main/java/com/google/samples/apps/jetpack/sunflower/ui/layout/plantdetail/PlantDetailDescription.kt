@@ -47,6 +47,7 @@ import com.google.samples.apps.jetpack.sunflower.viewmodels.PlantDetailViewModel
 @Composable
 fun PlantDetailDescription(
     plantDetailViewModel: PlantDetailViewModel,
+    navClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     // Observes values coming from the VM's LiveData<Plant> field as State<Plant?>
@@ -55,12 +56,17 @@ fun PlantDetailDescription(
     // New emissions from plant will make PlantDetailDescription recompose as the state's read here
     plant?.let {
         // If plant is not null, display the content
-        PlantDetailContent(it, !plantDetailViewModel.hasValidUnsplashKey(), modifier)
+        PlantDetailContent(it, !plantDetailViewModel.hasValidUnsplashKey(), navClick, modifier)
     }
 }
 
 @Composable
-fun PlantDetailContent(plant: Plant, navIsGone: Boolean, modifier: Modifier = Modifier) {
+fun PlantDetailContent(
+    plant: Plant,
+    navIsGone: Boolean,
+    navClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
 //    Surface {
     ConstraintLayout(modifier.padding(dimensionResource(R.dimen.margin_normal))) {
         val (name, water, desc, nav) = createRefs()
@@ -90,7 +96,7 @@ fun PlantDetailContent(plant: Plant, navIsGone: Boolean, modifier: Modifier = Mo
                         top = dimensionResource(R.dimen.margin_normal),
                         right = dimensionResource(R.dimen.margin_small)
                     )
-                    .clickable { }
+                    .clickable { navClick() }
                     .constrainAs(nav) {
                         top.linkTo(name.bottom)
                         end.linkTo(parent.end)
@@ -160,24 +166,6 @@ private fun PlantDescription(description: String, modifier: Modifier) {
         },
         modifier = modifier
     )
-}
-
-@Preview
-@Composable
-private fun PlantDetailContentPreview() {
-    val plant = Plant("id", "Apple", "HTML<br><br>description", 3, 30, "")
-    MdcTheme {
-        PlantDetailContent(plant, false)
-    }
-}
-
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun PlantDetailContentDarkPreview() {
-    val plant = Plant("id", "Apple", "HTML<br><br>description", 3, 30, "")
-    MdcTheme {
-        PlantDetailContent(plant, false)
-    }
 }
 
 @Preview
