@@ -21,9 +21,8 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.google.samples.apps.jetpack.sunflower.api.UnsplashService
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-class UnsplashRepository @Inject constructor(private val service: UnsplashService) {
+class UnsplashRepository constructor(private val service: UnsplashService) {
 
     fun getSearchResultStream(query: String): Flow<PagingData<UnsplashPhoto>> {
         return Pager(
@@ -34,5 +33,11 @@ class UnsplashRepository @Inject constructor(private val service: UnsplashServic
 
     companion object {
         private const val NETWORK_PAGE_SIZE = 25
+        @Volatile private var instance: UnsplashRepository? = null
+
+        fun getInstance(service: UnsplashService = UnsplashService.create()) =
+            instance ?: synchronized(this) {
+                instance ?: UnsplashRepository(service).also { instance = it }
+            }
     }
 }

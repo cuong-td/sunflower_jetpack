@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Google LLC
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,35 +17,22 @@
 package com.google.samples.apps.jetpack.sunflower.viewmodels
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
-import com.google.samples.apps.jetpack.sunflower.BuildConfig
-import com.google.samples.apps.jetpack.sunflower.PlantDetailFragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.samples.apps.jetpack.sunflower.data.GardenPlantingRepository
 import com.google.samples.apps.jetpack.sunflower.data.PlantRepository
-import kotlinx.coroutines.launch
 
 /**
- * The ViewModel used in [PlantDetailFragment].
+ * Factory for creating a [PlantDetailViewModel] with a constructor that takes a [PlantRepository]
+ * and an ID for the current [Plant].
  */
-class PlantDetailViewModel constructor(
-    plantRepository: PlantRepository,
+class PlantDetailViewModelFactory(
+    private val plantRepository: PlantRepository,
     private val gardenPlantingRepository: GardenPlantingRepository,
-    val plantId: String
-) : ViewModel() {
+    private val plantId: String
+) : ViewModelProvider.Factory {
 
-    val isPlanted = gardenPlantingRepository.isPlanted(plantId).asLiveData()
-    val plant = plantRepository.getPlant(plantId).asLiveData()
-
-    fun addPlantToGarden() {
-        viewModelScope.launch {
-            gardenPlantingRepository.createGardenPlanting(plantId)
-        }
-    }
-
-    fun hasValidUnsplashKey() = (BuildConfig.UNSPLASH_ACCESS_KEY != "null")
-
-    companion object {
-        private const val PLANT_ID_SAVED_STATE_KEY = "plantId"
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return PlantDetailViewModel(plantRepository, gardenPlantingRepository, plantId) as T
     }
 }
