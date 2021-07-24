@@ -36,7 +36,7 @@
 
     <fragment
         android:id="@+id/plant_detail_fragment"
-        android:name="com.google.samples.apps.jetpack.sunflower.PlantDetailFragment"
+        android:name="com.google.samples.apps.jetpack.sunflower.layout.plantdetail.PlantDetailFragment"
         android:label="@string/plant_details_title"
         tools:layout="@layout/fragment_plant_detail">
 

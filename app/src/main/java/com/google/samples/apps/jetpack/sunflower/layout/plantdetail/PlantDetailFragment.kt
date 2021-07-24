@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.jetpack.sunflower
+package com.google.samples.apps.jetpack.sunflower.layout.plantdetail
 
 import android.content.Intent
 import android.os.Bundle
@@ -30,9 +30,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.composethemeadapter.MdcTheme
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import com.google.samples.apps.jetpack.sunflower.PlantDetailFragment.Callback
+import com.google.samples.apps.jetpack.sunflower.R
+import com.google.samples.apps.jetpack.sunflower.layout.plantdetail.PlantDetailFragment.Callback
 import com.google.samples.apps.jetpack.sunflower.data.Plant
 import com.google.samples.apps.jetpack.sunflower.databinding.FragmentPlantDetailBinding
 import com.google.samples.apps.jetpack.sunflower.utilities.Injector
@@ -71,7 +73,7 @@ class PlantDetailFragment : Fragment() {
                 }
             }
 
-            galleryNav.setOnClickListener { navigateToGallery() }
+//            galleryNav.setOnClickListener { navigateToGallery() }
 
             var isToolbarShown = false
 
@@ -108,6 +110,12 @@ class PlantDetailFragment : Fragment() {
                         true
                     }
                     else -> false
+                }
+            }
+
+            composeView.setContent {
+                MdcTheme {
+                    PlantDetailDescription(plantDetailViewModel)
                 }
             }
         }
