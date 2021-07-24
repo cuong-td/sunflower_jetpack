@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.sunflower.viewmodels
+package com.google.samples.apps.jetpack.sunflower.viewmodels
 
 import android.os.Bundle
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
-import com.google.samples.apps.sunflower.data.PlantRepository
+import com.google.samples.apps.jetpack.sunflower.data.PlantRepository
 
 /**
  * Factory for creating a [PlantListViewModel] with a constructor that takes a [PlantRepository].

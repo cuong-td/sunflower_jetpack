@@ -29,21 +29,24 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.samples.apps.jetpack.sunflower.PlantDetailFragment.Callback
 import com.google.samples.apps.jetpack.sunflower.data.Plant
 import com.google.samples.apps.jetpack.sunflower.databinding.FragmentPlantDetailBinding
+import com.google.samples.apps.jetpack.sunflower.utilities.Injector
 import com.google.samples.apps.jetpack.sunflower.viewmodels.PlantDetailViewModel
-import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * A fragment representing a single Plant detail screen.
  */
-@AndroidEntryPoint
 class PlantDetailFragment : Fragment() {
+    private val args: PlantDetailFragmentArgs by navArgs()
 
-    private val plantDetailViewModel: PlantDetailViewModel by viewModels()
+    private val plantDetailViewModel: PlantDetailViewModel by viewModels {
+        Injector.providePlantDetailViewModelFactory(requireActivity(), args.plantId)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

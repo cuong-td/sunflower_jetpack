@@ -17,24 +17,20 @@
 package com.google.samples.apps.jetpack.sunflower
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import com.google.samples.apps.jetpack.sunflower.adapters.PlantAdapter
 import com.google.samples.apps.jetpack.sunflower.databinding.FragmentPlantListBinding
+import com.google.samples.apps.jetpack.sunflower.utilities.Injector
 import com.google.samples.apps.jetpack.sunflower.viewmodels.PlantListViewModel
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class PlantListFragment : Fragment() {
 
-    private val viewModel: PlantListViewModel by viewModels()
+    private val viewModel: PlantListViewModel by viewModels {
+        Injector.providePlantListViewModelFactory(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

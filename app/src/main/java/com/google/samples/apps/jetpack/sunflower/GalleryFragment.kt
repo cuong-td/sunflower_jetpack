@@ -27,19 +27,20 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.samples.apps.jetpack.sunflower.adapters.GalleryAdapter
 import com.google.samples.apps.jetpack.sunflower.databinding.FragmentGalleryBinding
+import com.google.samples.apps.jetpack.sunflower.utilities.Injector
 import com.google.samples.apps.jetpack.sunflower.viewmodels.GalleryViewModel
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-@AndroidEntryPoint
 class GalleryFragment : Fragment() {
 
     private val adapter = GalleryAdapter()
     private val args: GalleryFragmentArgs by navArgs()
     private var searchJob: Job? = null
-    private val viewModel: GalleryViewModel by viewModels()
+    private val viewModel: GalleryViewModel by viewModels {
+        Injector.provideGalleryViewModelFactory()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

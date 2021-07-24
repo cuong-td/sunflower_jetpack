@@ -22,9 +22,11 @@ import com.google.samples.apps.jetpack.sunflower.api.UnsplashService
 import com.google.samples.apps.jetpack.sunflower.data.AppDatabase
 import com.google.samples.apps.jetpack.sunflower.data.GardenPlantingRepository
 import com.google.samples.apps.jetpack.sunflower.data.PlantRepository
+import com.google.samples.apps.jetpack.sunflower.data.UnsplashRepository
+import com.google.samples.apps.jetpack.sunflower.viewmodels.GalleryViewModelFactory
 import com.google.samples.apps.jetpack.sunflower.viewmodels.GardenPlantingListViewModelFactory
 import com.google.samples.apps.jetpack.sunflower.viewmodels.PlantDetailViewModelFactory
-import com.google.samples.apps.sunflower.viewmodels.PlantListViewModelFactory
+import com.google.samples.apps.jetpack.sunflower.viewmodels.PlantListViewModelFactory
 
 /**
  * Static methods used to inject classes needed for various Activities and Fragments.
@@ -43,6 +45,8 @@ object Injector {
             AppDatabase.getInstance(context.applicationContext).gardenPlantingDao()
         )
     }
+
+    fun provideGalleryViewModelFactory() = GalleryViewModelFactory(UnsplashRepository.getInstance())
 
     fun provideGardenPlantingListViewModelFactory(
         context: Context
