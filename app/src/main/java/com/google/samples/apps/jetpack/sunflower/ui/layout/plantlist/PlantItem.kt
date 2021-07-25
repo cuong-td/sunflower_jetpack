@@ -34,9 +34,10 @@ import com.google.samples.apps.jetpack.sunflower.data.Plant
 import com.google.samples.apps.jetpack.sunflower.ui.layout.ItemSunflowerCard
 
 @Composable
-fun ItemPlant(plant: Plant) = ItemSunflowerCard {
-    ItemPlantContent(plant)
-}
+fun ItemPlant(plant: Plant, clicked: (Plant) -> Unit) = ItemSunflowerCard(
+    content = { ItemPlantContent(plant) },
+    clicked = { clicked(plant) }
+)
 
 @Composable
 fun ItemPlantContent(plant: Plant) {

@@ -37,33 +37,36 @@ class PlantAdapter : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallba
         val view = ComposeView(parent.context)
         val holder = PlantViewHolder(view)
         view.setContent {
-            ItemPlant(getItem(holder.bindingAdapterPosition))
+            ItemPlant(getItem(holder.bindingAdapterPosition)) {
+                holder.navigateToPlant(it)
+            }
         }
         return holder
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val plant = getItem(position)
-        (holder.itemView as? ComposeView)?.setContent { ItemPlant(plant) }
+        (holder.itemView as? ComposeView)?.setContent {
+            ItemPlant(plant) { (holder as PlantViewHolder).navigateToPlant(it) }
+        }
     }
 
     class PlantViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         init {
             view.setOnClickListener {
                 val plant = (bindingAdapter as PlantAdapter).getItem(bindingAdapterPosition)
-                navigateToPlant(plant, it)
+                navigateToPlant(plant)
             }
         }
 
-        private fun navigateToPlant(
-            plant: Plant,
-            view: View
+        fun navigateToPlant(
+            plant: Plant
         ) {
             val direction =
                 HomeViewPagerFragmentDirections.actionViewPagerFragmentToPlantDetailFragment(
                     plant.plantId
                 )
-            view.findNavController().navigate(direction)
+            itemView.findNavController().navigate(direction)
         }
     }
 }

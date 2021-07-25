@@ -27,13 +27,15 @@ import com.google.samples.apps.jetpack.sunflower.R
 import com.google.samples.apps.jetpack.sunflower.ui.theme.CardShape
 
 @Composable
-fun ItemSunflowerCard(content: @Composable () -> Unit) {
+fun ItemSunflowerCard(content: @Composable () -> Unit, clicked: () -> Unit = {}) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = dimensionResource(R.dimen.card_side_margin))
             .padding(bottom = dimensionResource(R.dimen.card_bottom_margin))
-            .clickable { },
+            .clickable {
+                clicked()
+            },
         elevation = dimensionResource(R.dimen.card_elevation),
         shape = CardShape(),
         content = content
