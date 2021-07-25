@@ -20,20 +20,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.google.samples.apps.jetpack.sunflower.HomeViewPagerFragmentDirections
 import com.google.samples.apps.jetpack.sunflower.R
-import com.google.samples.apps.jetpack.sunflower.adapters.GardenPlantingAdapter
 import com.google.samples.apps.jetpack.sunflower.adapters.PLANT_LIST_PAGE_INDEX
-import com.google.samples.apps.jetpack.sunflower.databinding.FragmentGardenBinding
 import com.google.samples.apps.jetpack.sunflower.utilities.Injector
 import com.google.samples.apps.jetpack.sunflower.viewmodels.GardenPlantingListViewModel
 
 class GardenFragment : Fragment() {
-
-    private lateinit var binding: FragmentGardenBinding
 
     private val viewModel: GardenPlantingListViewModel by viewModels {
         Injector.provideGardenPlantingListViewModelFactory(requireContext())
@@ -44,22 +42,28 @@ class GardenFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentGardenBinding.inflate(inflater, container, false)
-        val adapter = GardenPlantingAdapter()
-        binding.gardenList.adapter = adapter
-
-        binding.addPlant.setOnClickListener {
-            navigateToPlantListPage()
-        }
-
-        subscribeUi(adapter, binding)
-        return binding.root
+        return ComposeView(requireContext())
     }
 
-    private fun subscribeUi(adapter: GardenPlantingAdapter, binding: FragmentGardenBinding) {
-        viewModel.plantAndGardenPlantings.observe(viewLifecycleOwner) { result ->
-            binding.hasPlantings = !result.isNullOrEmpty()
-            adapter.submitList(result)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        subscribeUi()
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun subscribeUi() {
+        viewModel.plantAndGardenPlantings.observe(viewLifecycleOwner) {
+            (view as? ComposeView)?.setContent {
+                GardenPage(it,
+                    itemClicked = {
+                        val direction = HomeViewPagerFragmentDirections
+                            .actionViewPagerFragmentToPlantDetailFragment(it)
+                        findNavController().navigate(direction)
+                    },
+                    noItemClicked = {
+                        navigateToPlantListPage()
+                    }
+                )
+            }
         }
     }
 
