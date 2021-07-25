@@ -17,7 +17,7 @@
 package com.google.samples.apps.jetpack.sunflower.viewmodels
 
 import androidx.lifecycle.*
-import com.google.samples.apps.jetpack.sunflower.PlantListFragment
+import com.google.samples.apps.jetpack.sunflower.ui.layout.plantlist.PlantListFragment
 import com.google.samples.apps.jetpack.sunflower.data.Plant
 import com.google.samples.apps.jetpack.sunflower.data.PlantRepository
 import kotlinx.coroutines.flow.MutableStateFlow

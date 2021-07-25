@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.jetpack.sunflower
+package com.google.samples.apps.jetpack.sunflower.ui.layout.plantlist
 
 import android.os.Bundle
 import android.view.*
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
-import com.google.samples.apps.jetpack.sunflower.adapters.PlantAdapter
-import com.google.samples.apps.jetpack.sunflower.databinding.FragmentPlantListBinding
+import androidx.navigation.fragment.findNavController
+import com.google.samples.apps.jetpack.sunflower.HomeViewPagerFragmentDirections
+import com.google.samples.apps.jetpack.sunflower.R
 import com.google.samples.apps.jetpack.sunflower.utilities.Injector
 import com.google.samples.apps.jetpack.sunflower.viewmodels.PlantListViewModel
 
@@ -37,15 +38,13 @@ class PlantListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentPlantListBinding.inflate(inflater, container, false)
-        context ?: return binding.root
-
-        val adapter = PlantAdapter()
-        binding.plantList.adapter = adapter
-        subscribeUi(adapter)
-
         setHasOptionsMenu(true)
-        return binding.root
+        return ComposeView(requireContext())
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        subscribeUi()
+        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -62,9 +61,17 @@ class PlantListFragment : Fragment() {
         }
     }
 
-    private fun subscribeUi(adapter: PlantAdapter) {
+    private fun subscribeUi() {
         viewModel.plants.observe(viewLifecycleOwner) { plants ->
-            adapter.submitList(plants)
+            (view as? ComposeView)?.setContent {
+                PlantListPage(plants) {
+                    val direction =
+                        HomeViewPagerFragmentDirections.actionViewPagerFragmentToPlantDetailFragment(
+                            it.plantId
+                        )
+                    findNavController().navigate(direction)
+                }
+            }
         }
     }
 
