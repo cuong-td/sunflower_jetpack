@@ -16,9 +16,9 @@
 
 package com.google.samples.apps.jetpack.sunflower.adapters
 
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.samples.apps.jetpack.sunflower.HomeViewPagerFragmentDirections
 import com.google.samples.apps.jetpack.sunflower.PlantListFragment
 import com.google.samples.apps.jetpack.sunflower.data.Plant
-import com.google.samples.apps.jetpack.sunflower.databinding.ListItemPlantBinding
 import com.google.samples.apps.jetpack.sunflower.ui.layout.plantlist.ItemPlant
 
 /**
@@ -35,13 +34,9 @@ import com.google.samples.apps.jetpack.sunflower.ui.layout.plantlist.ItemPlant
 class PlantAdapter : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val viewBinding = ListItemPlantBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-        val holder = PlantViewHolder(viewBinding)
-        viewBinding.composeView.setContent {
+        val view = ComposeView(parent.context)
+        val holder = PlantViewHolder(view)
+        view.setContent {
             ItemPlant(getItem(holder.bindingAdapterPosition))
         }
         return holder
@@ -49,17 +44,14 @@ class PlantAdapter : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallba
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val plant = getItem(position)
-        (holder as PlantViewHolder).bind(plant)
+        (holder.itemView as? ComposeView)?.setContent { ItemPlant(plant) }
     }
 
-    class PlantViewHolder(
-        private val binding: ListItemPlantBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+    class PlantViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         init {
-            binding.setClickListener {
-                binding.plant?.let { plant ->
-                    navigateToPlant(plant, it)
-                }
+            view.setOnClickListener {
+                val plant = (bindingAdapter as PlantAdapter).getItem(bindingAdapterPosition)
+                navigateToPlant(plant, it)
             }
         }
 
@@ -72,13 +64,6 @@ class PlantAdapter : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallba
                     plant.plantId
                 )
             view.findNavController().navigate(direction)
-        }
-
-        fun bind(item: Plant) {
-            binding.apply {
-                plant = item
-                executePendingBindings()
-            }
         }
     }
 }
