@@ -16,16 +16,15 @@
 
 package com.google.samples.apps.jetpack.sunflower.adapters
 
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.samples.apps.jetpack.sunflower.HomeViewPagerFragmentDirections
 import com.google.samples.apps.jetpack.sunflower.data.PlantAndGardenPlantings
-import com.google.samples.apps.jetpack.sunflower.databinding.ListItemGardenPlantingBinding
 import com.google.samples.apps.jetpack.sunflower.ui.layout.garden.ItemGarden
 import com.google.samples.apps.jetpack.sunflower.viewmodels.PlantAndGardenPlantingsViewModel
 
@@ -35,46 +34,26 @@ class GardenPlantingAdapter :
     ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            ListItemGardenPlantingBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            ).apply {
-                composeView.setContent {
-                    viewModel?.let {
-                        ItemGarden(it)
-                    }
-                }
-            }
-        )
+        return ViewHolder(ComposeView(parent.context))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    class ViewHolder(
-        private val binding: ListItemGardenPlantingBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-        init {
-            binding.setClickListener { view ->
-                binding.viewModel?.plantId?.let { plantId ->
-                    navigateToPlant(plantId, view)
-                }
-            }
-        }
-
-        private fun navigateToPlant(plantId: String, view: View) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private fun navigateToPlant(plantId: String) {
             val direction = HomeViewPagerFragmentDirections
                 .actionViewPagerFragmentToPlantDetailFragment(plantId)
-            view.findNavController().navigate(direction)
+            itemView.findNavController().navigate(direction)
         }
 
         fun bind(plantings: PlantAndGardenPlantings) {
-            with(binding) {
-                viewModel = PlantAndGardenPlantingsViewModel(plantings)
-                executePendingBindings()
+            val viewModel = PlantAndGardenPlantingsViewModel(plantings)
+            (itemView as? ComposeView)?.setContent {
+                ItemGarden(viewModel) {
+                    navigateToPlant(it)
+                }
             }
         }
     }

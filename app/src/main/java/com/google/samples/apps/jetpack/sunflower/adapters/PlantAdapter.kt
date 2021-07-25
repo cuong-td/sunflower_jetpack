@@ -31,24 +31,15 @@ import com.google.samples.apps.jetpack.sunflower.ui.layout.plantlist.ItemPlant
 /**
  * Adapter for the [RecyclerView] in [PlantListFragment].
  */
-class PlantAdapter : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallback()) {
+class PlantAdapter : ListAdapter<Plant, PlantAdapter.PlantViewHolder>(PlantDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = ComposeView(parent.context)
-        val holder = PlantViewHolder(view)
-        view.setContent {
-            ItemPlant(getItem(holder.bindingAdapterPosition)) {
-                holder.navigateToPlant(it)
-            }
-        }
-        return holder
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlantViewHolder {
+        return PlantViewHolder(ComposeView(parent.context))
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PlantViewHolder, position: Int) {
         val plant = getItem(position)
-        (holder.itemView as? ComposeView)?.setContent {
-            ItemPlant(plant) { (holder as PlantViewHolder).navigateToPlant(it) }
-        }
+        holder.bind(plant)
     }
 
     class PlantViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -59,7 +50,13 @@ class PlantAdapter : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallba
             }
         }
 
-        fun navigateToPlant(
+        fun bind(plant: Plant) {
+            (itemView as? ComposeView)?.setContent {
+                ItemPlant(plant) { navigateToPlant(it) }
+            }
+        }
+
+        private fun navigateToPlant(
             plant: Plant
         ) {
             val direction =

@@ -33,16 +33,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import coil.compose.rememberImagePainter
 import com.google.samples.apps.jetpack.sunflower.R
+import com.google.samples.apps.jetpack.sunflower.ui.layout.ItemSunflowerCard
 import com.google.samples.apps.jetpack.sunflower.viewmodels.PlantAndGardenPlantingsViewModel
 
 @Composable
-fun ItemGarden(viewModel: PlantAndGardenPlantingsViewModel) {
-    Column(Modifier.fillMaxWidth()) {
+fun ItemGarden(viewModel: PlantAndGardenPlantingsViewModel, clicked: (String) -> Unit) =
+    ItemSunflowerCard(
+        content = { ItemGardenContent(viewModel) },
+        clicked = { clicked(viewModel.plantId) }
+    )
+
+@Composable
+fun ItemGardenContent(viewModel: PlantAndGardenPlantingsViewModel) {
+    Column {
         Image(
             painter = rememberImagePainter(viewModel.imageUrl),
             contentDescription = stringResource(R.string.a11y_plant_item_image),
             contentScale = ContentScale.Crop,
-            modifier = Modifier.height(dimensionResource(R.dimen.plant_item_image_height))
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(dimensionResource(R.dimen.plant_item_image_height))
         )
         Text(
             viewModel.plantName,

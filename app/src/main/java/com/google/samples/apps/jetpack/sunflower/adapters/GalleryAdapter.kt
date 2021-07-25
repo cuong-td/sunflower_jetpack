@@ -33,28 +33,19 @@ import com.google.samples.apps.jetpack.sunflower.ui.layout.photo.ItemPhoto
 
 class GalleryAdapter :
     PagingDataAdapter<UnsplashPhoto, RecyclerView.ViewHolder>(GalleryDiffCallback()) {
-    var itemClicked: ((UnsplashPhoto) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = ComposeView(parent.context)
-        val holder = object : RecyclerView.ViewHolder(view) {}
-        if (itemClicked == null)
-            itemClicked = {
-                val uri = Uri.parse(it.user.attributionUrl)
-                val intent = Intent(Intent.ACTION_VIEW, uri)
-                parent.context.startActivity(intent)
-            }
-        if (holder.bindingAdapterPosition >= 0)
-            getItem(holder.bindingAdapterPosition)?.let {
-                view.setContent { ItemPhoto(it, itemClicked ?: {}) }
-            }
-        return holder
+        return object : RecyclerView.ViewHolder(ComposeView(parent.context)) {}
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         getItem(position)?.let {
             (holder.itemView as? ComposeView)?.setContent {
-                ItemPhoto(it, itemClicked ?: {})
+                ItemPhoto(it) {
+                    val uri = Uri.parse(it.user.attributionUrl)
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    holder.itemView.context.startActivity(intent)
+                }
             }
         }
     }
