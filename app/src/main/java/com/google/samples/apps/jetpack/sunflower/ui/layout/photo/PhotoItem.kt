@@ -31,15 +31,24 @@ import androidx.compose.ui.text.style.TextAlign
 import coil.compose.rememberImagePainter
 import com.google.samples.apps.jetpack.sunflower.R
 import com.google.samples.apps.jetpack.sunflower.data.UnsplashPhoto
+import com.google.samples.apps.jetpack.sunflower.ui.layout.ItemSunflowerCard
 
 @Composable
-fun ItemPhoto(photo: UnsplashPhoto) {
-    Column(Modifier.fillMaxWidth()) {
+fun ItemPhoto(photo: UnsplashPhoto, clicked: (UnsplashPhoto) -> Unit) = ItemSunflowerCard(
+    content = { ItemPhotoContent(photo) },
+    clicked = { clicked(photo) }
+)
+
+@Composable
+fun ItemPhotoContent(photo: UnsplashPhoto) {
+    Column {
         Image(
             painter = rememberImagePainter(photo.urls.small),
             contentDescription = stringResource(R.string.a11y_plant_item_image),
             contentScale = ContentScale.Crop,
-            modifier = Modifier.height(dimensionResource(R.dimen.plant_item_image_height))
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(dimensionResource(R.dimen.plant_item_image_height))
         )
         Text(
             photo.user.name,

@@ -18,60 +18,43 @@ package com.google.samples.apps.jetpack.sunflower.adapters
 
 import android.content.Intent
 import android.net.Uri
-import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.samples.apps.jetpack.sunflower.GalleryFragment
-import com.google.samples.apps.jetpack.sunflower.adapters.GalleryAdapter.GalleryViewHolder
 import com.google.samples.apps.jetpack.sunflower.data.UnsplashPhoto
-import com.google.samples.apps.jetpack.sunflower.databinding.ListItemPhotoBinding
 import com.google.samples.apps.jetpack.sunflower.ui.layout.photo.ItemPhoto
 
 /**
  * Adapter for the [RecyclerView] in [GalleryFragment].
  */
 
-class GalleryAdapter : PagingDataAdapter<UnsplashPhoto, GalleryViewHolder>(GalleryDiffCallback()) {
+class GalleryAdapter :
+    PagingDataAdapter<UnsplashPhoto, RecyclerView.ViewHolder>(GalleryDiffCallback()) {
+    var itemClicked: ((UnsplashPhoto) -> Unit)? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
-        val viewBinding = ListItemPhotoBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-        val holder = GalleryViewHolder(viewBinding)
-        getItem(holder.bindingAdapterPosition)?.let {
-            viewBinding.composeView.setContent { ItemPhoto(it) }
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val view = ComposeView(parent.context)
+        val holder = object : RecyclerView.ViewHolder(view) {}
+        if (itemClicked == null)
+            itemClicked = {
+                val uri = Uri.parse(it.user.attributionUrl)
+                val intent = Intent(Intent.ACTION_VIEW, uri)
+                parent.context.startActivity(intent)
+            }
+        if (holder.bindingAdapterPosition >= 0)
+            getItem(holder.bindingAdapterPosition)?.let {
+                view.setContent { ItemPhoto(it, itemClicked ?: {}) }
+            }
         return holder
     }
 
-    override fun onBindViewHolder(holder: GalleryViewHolder, position: Int) {
-        val photo = getItem(position)
-        if (photo != null) {
-            holder.bind(photo)
-        }
-    }
-
-    class GalleryViewHolder(
-        private val binding: ListItemPhotoBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-        init {
-            binding.setClickListener { view ->
-                binding.photo?.let { photo ->
-                    val uri = Uri.parse(photo.user.attributionUrl)
-                    val intent = Intent(Intent.ACTION_VIEW, uri)
-                    view.context.startActivity(intent)
-                }
-            }
-        }
-
-        fun bind(item: UnsplashPhoto) {
-            binding.apply {
-                photo = item
-                executePendingBindings()
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        getItem(position)?.let {
+            (holder.itemView as? ComposeView)?.setContent {
+                ItemPhoto(it, itemClicked ?: {})
             }
         }
     }

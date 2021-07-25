@@ -46,7 +46,9 @@ fun ItemPlantContent(plant: Plant) {
             painter = rememberImagePainter(plant.imageUrl),
             contentDescription = stringResource(R.string.a11y_plant_item_image),
             contentScale = ContentScale.Crop,
-            modifier = Modifier.height(dimensionResource(R.dimen.plant_item_image_height))
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(dimensionResource(R.dimen.plant_item_image_height))
         )
         Text(
             plant.name,
