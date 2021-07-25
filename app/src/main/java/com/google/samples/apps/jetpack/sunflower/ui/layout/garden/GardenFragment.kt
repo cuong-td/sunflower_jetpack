@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Google LLC
+ * Copyright 2021 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.jetpack.sunflower
+package com.google.samples.apps.jetpack.sunflower.ui.layout.garden
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.viewpager2.widget.ViewPager2
+import com.google.samples.apps.jetpack.sunflower.R
 import com.google.samples.apps.jetpack.sunflower.adapters.GardenPlantingAdapter
 import com.google.samples.apps.jetpack.sunflower.adapters.PLANT_LIST_PAGE_INDEX
 import com.google.samples.apps.jetpack.sunflower.databinding.FragmentGardenBinding

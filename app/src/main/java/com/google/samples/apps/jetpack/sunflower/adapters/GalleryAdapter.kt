@@ -23,7 +23,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.google.samples.apps.jetpack.sunflower.GalleryFragment
+import com.google.samples.apps.jetpack.sunflower.ui.layout.photo.GalleryFragment
 import com.google.samples.apps.jetpack.sunflower.data.UnsplashPhoto
 import com.google.samples.apps.jetpack.sunflower.ui.layout.photo.ItemPhoto
 

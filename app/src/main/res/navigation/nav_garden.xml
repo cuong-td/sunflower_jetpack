@@ -54,7 +54,7 @@
 
     <fragment
         android:id="@+id/gallery_fragment"
-        android:name="com.google.samples.apps.jetpack.sunflower.GalleryFragment"
+        android:name="com.google.samples.apps.jetpack.sunflower.ui.layout.photo.GalleryFragment"
         android:label="@string/plant_details_title"
         tools:layout="@layout/fragment_gallery">
         <argument

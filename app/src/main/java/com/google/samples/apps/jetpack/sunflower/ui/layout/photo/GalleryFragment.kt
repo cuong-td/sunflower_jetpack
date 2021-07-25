@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.jetpack.sunflower
+package com.google.samples.apps.jetpack.sunflower.ui.layout.photo
 
 import android.os.Bundle
 import android.view.LayoutInflater

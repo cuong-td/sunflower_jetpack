@@ -18,7 +18,7 @@ package com.google.samples.apps.jetpack.sunflower.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.google.samples.apps.jetpack.sunflower.GardenFragment
+import com.google.samples.apps.jetpack.sunflower.ui.layout.garden.GardenFragment
 import com.google.samples.apps.jetpack.sunflower.ui.layout.plantlist.PlantListFragment
 
 const val MY_GARDEN_PAGE_INDEX = 0
